@@ -1,7 +1,25 @@
+<#
+.SYNOPSIS
+Deploys the EmployeeManagementApi to an Azure Web App.
+
+.PARAMETER ResourceGroup
+Name of the Azure resource group.
+
+.PARAMETER WebAppName
+Name of the Web App to create.
+
+.PARAMETER Location
+Azure region for the resources. Defaults to eastus.
+
+.PARAMETER Sku
+App Service plan pricing tier. Defaults to F1.
+#>
+
 param(
     [Parameter(Mandatory=$true)][string]$ResourceGroup,
     [Parameter(Mandatory=$true)][string]$WebAppName,
-    [string]$Location = "eastus"
+    [string]$Location = "eastus",
+    [string]$Sku = "F1"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,7 +30,7 @@ Write-Host "Creating App Service plan $planName in resource group $ResourceGroup
 az appservice plan create `
     --name $planName `
     --resource-group $ResourceGroup `
-    --sku F1 `
+    --sku $Sku `
     --is-linux `
     --location $Location
 
