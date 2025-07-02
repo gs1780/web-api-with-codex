@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using EmployeeManagementApi.Data;
 using EmployeeManagementApi.Services;
 
@@ -16,10 +17,20 @@ if (useSqlServer)
 }
 else
 {
-    var dbPath = Path.Combine(builder.Environment.ContentRootPath, "DataFiles", "employeedb.db");
-    Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? "Data Source=DataFiles/employeedb.db";
+
+    var sqliteBuilder = new SqliteConnectionStringBuilder(connectionString);
+
+    if (!Path.IsPathRooted(sqliteBuilder.DataSource))
+    {
+        sqliteBuilder.DataSource = Path.Combine(builder.Environment.ContentRootPath, sqliteBuilder.DataSource);
+    }
+
+    Directory.CreateDirectory(Path.GetDirectoryName(sqliteBuilder.DataSource)!);
+
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite($"Data Source={dbPath}"));
+        options.UseSqlite(sqliteBuilder.ToString()));
 }
 
 builder.Services.AddScoped<ExcelHelper>();
