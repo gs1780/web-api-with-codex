@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagementApi.Data;
 using EmployeeManagementApi.Models;
+using EmployeeManagementApi.Services;
 
 namespace EmployeeManagementApi.Controllers;
 
