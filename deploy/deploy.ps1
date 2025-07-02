@@ -56,9 +56,10 @@ Write-Host "Creating deployment archive..."
 Compress-Archive -Path (Join-Path $publishFolder '*') -DestinationPath $zipPath
 
 Write-Host "Deploying to Azure..."
-az webapp deployment source config-zip `
+az webapp deploy `
     --resource-group $ResourceGroup `
     --name $WebAppName `
-    --src $zipPath
+    --src-path $zipPath `
+    --type zip
 
 Write-Host "Deployment completed"

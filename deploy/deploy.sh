@@ -19,7 +19,8 @@ az deployment group create \
 
 zip -r app.zip EmployeeManagementApi -x "*/bin/*" "*/obj/*"
 
-az webapp deployment source config-zip \
+az webapp deploy \
   --resource-group "$RESOURCE_GROUP" \
   --name "$WEBAPP_NAME" \
-  --src app.zip
+  --src-path app.zip \
+  --type zip
