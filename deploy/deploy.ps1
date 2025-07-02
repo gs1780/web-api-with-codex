@@ -2,29 +2,31 @@
 .SYNOPSIS
 Deploys the EmployeeManagementApi to an Azure Web App.
 
-.PARAMETER ResourceGroup
-Name of the Azure resource group.
 
-.PARAMETER WebAppName
-Name of the Web App to create.
+.PARAMETER ResourceGroup
+Name of the Azure resource group. Defaults to india-app-service-rg.
+
+.PARAMETER WebAppSuffix
+Five-digit suffix appended to the Web App name.
 
 .PARAMETER Location
-Azure region for the resources. Defaults to eastus.
+Azure region for the resources. Defaults to Central India.
 
 .PARAMETER Sku
 App Service plan pricing tier. Defaults to F1.
 #>
 
 param(
-    [Parameter(Mandatory=$true)][string]$ResourceGroup,
-    [Parameter(Mandatory=$true)][string]$WebAppName,
-    [string]$Location = "eastus",
+    [string]$ResourceGroup = "india-app-service-rg",
+    [Parameter(Mandatory=$true)][string]$WebAppSuffix,
+    [string]$Location = "Central India",
     [string]$Sku = "F1"
 )
 
-$ErrorActionPreference = 'Stop'
+$WebAppName = "india-webapi-$WebAppSuffix"
+$planName = "india-app-plan-3749"
 
-$planName = "$WebAppName-plan"
+$ErrorActionPreference = 'Stop'
 
 Write-Host "Creating App Service plan $planName in resource group $ResourceGroup"
 az appservice plan create `
