@@ -55,7 +55,18 @@ Write-Host "Publishing project..."
 dotnet publish $projectPath -c Release -o $publishFolder
 
 Write-Host "Creating deployment archive..."
-Compress-Archive -Path (Join-Path $publishFolder '*') -DestinationPath $zipPath
+
+# Create zip entries with forward slashes so that the archive can be
+# extracted correctly on Linux based hosts. Compress-Archive preserves
+# Windows style backslashes which causes issues when deploying using
+# tools like `unzip`.
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$zip = [System.IO.Compression.ZipFile]::Open($zipPath, [System.IO.Compression.ZipArchiveMode]::Create)
+Get-ChildItem -Recurse -File -Path $publishFolder | ForEach-Object {
+    $relativePath = $_.FullName.Substring($publishFolder.Length + 1) -replace '\\','/'
+    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, $relativePath) | Out-Null
+}
+$zip.Dispose()
 
 Write-Host "Deploying to Azure..."
 az webapp deploy `
