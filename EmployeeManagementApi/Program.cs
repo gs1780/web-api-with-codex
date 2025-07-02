@@ -4,10 +4,23 @@ using EmployeeManagementApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+// Determine which database provider to use.
+var useSqlServer = builder.Configuration.GetValue<bool>("UseSqlServer") ||
+                   bool.TryParse(Environment.GetEnvironmentVariable("USE_SQL_SERVER"), out var envUseSqlServer) && envUseSqlServer;
+
+if (useSqlServer)
+{
+    var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")!;
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
+else
+{
+    var dbPath = Path.Combine(builder.Environment.ContentRootPath, "DataFiles", "employeedb.db");
+    Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite($"Data Source={dbPath}"));
+}
 
 builder.Services.AddScoped<ExcelHelper>();
 builder.Services.AddEndpointsApiExplorer();
