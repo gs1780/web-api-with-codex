@@ -31,6 +31,8 @@ else
 
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(sqliteBuilder.ToString()));
+
+    SqliteDbInitializer.EnsureCreated(sqliteBuilder.ToString(), builder.Environment.ContentRootPath);
 }
 
 builder.Services.AddScoped<ExcelHelper>();
