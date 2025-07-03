@@ -58,6 +58,10 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+// Serve default files such as index.html from wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors();
 
 app.UseAuthorization();
