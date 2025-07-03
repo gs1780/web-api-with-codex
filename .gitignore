@@ -5,3 +5,19 @@ obj/
 **/obj/
 build/
 out/
+# IDE directories
+.vscode/
+.vs/
+.idea/
+# User-specific files
+*.user
+*.suo
+# Publish directories
+publish/
+*/publish/
+TestResults/
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
