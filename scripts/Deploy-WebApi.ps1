@@ -18,8 +18,14 @@ Write-Host "Publishing application..." -ForegroundColor Cyan
 
 if (Test-Path $zipPath) { Remove-Item $zipPath }
 
-# Create the deployment package
-Compress-Archive -Path "$publishDir/*" -DestinationPath $zipPath -Force
+# Create the deployment package with consistent forward slashes
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory(
+    $publishDir,
+    $zipPath,
+    [System.IO.Compression.CompressionLevel]::Optimal,
+    $false
+)
 
 if (-not (az group exists --name $ResourceGroup)) {
     Write-Host "Creating resource group $ResourceGroup" -ForegroundColor Cyan
