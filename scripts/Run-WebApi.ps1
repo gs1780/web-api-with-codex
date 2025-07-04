@@ -1,46 +1,19 @@
-# Builds and runs the EmployeeManagementApi and launches the base URL when ready.
+# Restores, builds and runs the EmployeeManagementApi.
 
 [CmdletBinding()]
 param(
-    [string]$ProjectPath,
-    [string]$BaseUrl = "http://localhost:5000"
+    [string]$ProjectPath
 )
 
 if (-not $ProjectPath) {
     $ProjectPath = Join-Path $PSScriptRoot "../EmployeeManagementApi/EmployeeManagementApi.csproj"
 }
 
-function Wait-Port {
-    param([string]$Url)
-    $uri = [System.Uri]$Url
-    $hostName = $uri.Host
-    $port = $uri.Port
-    while ($true) {
-        try {
-            $client = New-Object System.Net.Sockets.TcpClient
-            $client.Connect($hostName, $port)
-            $client.Dispose()
-            break
-        } catch {
-            Start-Sleep -Seconds 1
-        }
-    }
-}
-
 Write-Host "Restoring packages..." -ForegroundColor Cyan
-& dotnet restore $ProjectPath | Out-Null
+dotnet restore $ProjectPath
 
 Write-Host "Building project..." -ForegroundColor Cyan
-& dotnet build $ProjectPath | Out-Null
+dotnet build $ProjectPath
 
-$env:ASPNETCORE_URLS = $BaseUrl
-
-Write-Host "Starting application..." -ForegroundColor Cyan
-$process = Start-Process "dotnet" "run --no-build --project `"$ProjectPath`"" -PassThru -NoNewWindow
-
-Wait-Port $BaseUrl
-
-Write-Host "Server is running at $BaseUrl" -ForegroundColor Green
-Start-Process $BaseUrl
-
-$process.WaitForExit()
+Write-Host "Running project..." -ForegroundColor Cyan
+dotnet run --no-build --project $ProjectPath
