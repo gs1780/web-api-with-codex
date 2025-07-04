@@ -8,6 +8,8 @@ param(
     [string]$Location = "East Asia"
 )
 
+
+# Publish output directory and zip package path
 $publishDir = Join-Path $PSScriptRoot "publish"
 $zipPath = Join-Path $PSScriptRoot "webapp.zip"
 
@@ -15,7 +17,15 @@ Write-Host "Publishing application..." -ForegroundColor Cyan
 & dotnet publish $ProjectPath -c Release -o $publishDir
 
 if (Test-Path $zipPath) { Remove-Item $zipPath }
-Compress-Archive -Path "$publishDir/*" -DestinationPath $zipPath -Force
+
+# Create zip using forward slashes when running on Linux
+if (Get-Command zip -ErrorAction SilentlyContinue) {
+    Push-Location $publishDir
+    & zip -r $zipPath . | Out-Null
+    Pop-Location
+} else {
+    Compress-Archive -Path "$publishDir/*" -DestinationPath $zipPath -Force
+}
 
 if (-not (az group exists --name $ResourceGroup)) {
     Write-Host "Creating resource group $ResourceGroup" -ForegroundColor Cyan
@@ -33,6 +43,6 @@ if (-not (az webapp show --name $WebAppName --resource-group $ResourceGroup 2>$n
 }
 
 Write-Host "Deploying package to $WebAppName" -ForegroundColor Cyan
-az webapp deployment source config-zip --resource-group $ResourceGroup --name $WebAppName --src $zipPath | Out-Null
+az webapp deploy --resource-group $ResourceGroup --name $WebAppName --src-path $zipPath --type zip | Out-Null
 
 Write-Host "Deployment complete." -ForegroundColor Green
