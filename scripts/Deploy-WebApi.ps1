@@ -18,14 +18,8 @@ Write-Host "Publishing application..." -ForegroundColor Cyan
 
 if (Test-Path $zipPath) { Remove-Item $zipPath }
 
-# Create zip using forward slashes when running on Linux
-if (Get-Command zip -ErrorAction SilentlyContinue) {
-    Push-Location $publishDir
-    & zip -r $zipPath . | Out-Null
-    Pop-Location
-} else {
-    Compress-Archive -Path "$publishDir/*" -DestinationPath $zipPath -Force
-}
+# Create the deployment package
+Compress-Archive -Path "$publishDir/*" -DestinationPath $zipPath -Force
 
 if (-not (az group exists --name $ResourceGroup)) {
     Write-Host "Creating resource group $ResourceGroup" -ForegroundColor Cyan
