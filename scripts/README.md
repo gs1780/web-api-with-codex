@@ -38,3 +38,7 @@ Publishes the EmployeeManagementApi project and deploys it to an Azure App Servi
 ```
 
 Parameters allow overriding the resource group, plan and app name. The default app name is **eastasia-webapi**.
+
+The deployment package is generated using the .NET `ZipFile` API so the entries
+within the archive always use forward slashes. This ensures compatibility across
+different operating systems.
