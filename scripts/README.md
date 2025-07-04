@@ -17,7 +17,7 @@ The script checks if the specified resource group exists and creates it in East 
 
 ## Run-WebApi.ps1
 
-Builds and runs the EmployeeManagementApi project. When the application is ready, it automatically opens the configured base URL in your default browser.
+Restores, builds and runs the EmployeeManagementApi project.
 
 ### Usage
 
@@ -25,7 +25,7 @@ Builds and runs the EmployeeManagementApi project. When the application is ready
 ./Run-WebApi.ps1
 ```
 
-Parameters allow overriding the project path and the base URL. The default URL is `http://localhost:5000`.
+An optional parameter lets you specify the project path.
 
 ## Deploy-WebApi.ps1
 
