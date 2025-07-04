@@ -1,0 +1,13 @@
+Create folder PowerShell script for AZURE CLI: create script to create Azure App service Linux base free plan named : "eastasia-app-service-plan" in Location = "East Asia"; keep easy to understand names in business tone;
+
+in scripts folder: write power shell script that build and run the .net core application; launch base url when run;
+
+
+in scripts folder: write power shell script that build and publish the .net core application to be deployed to linux based azure apps ervice; the zip the code with forward slash for linux delployment;
+
+in scripts folder: buiild and published the .net core web api project to deploy on linux based azure app service; create linux based app service if that not exists, then deploy the published dot bet build zip to the azure app service; name app service name as "eastasia-webapi"; 
+leverage existsing resource group "eastasia-rg1", app-service plan named : "eastasia-app-service-plan" in Location = "East Asia"  
+
+
+
+$location = "East Asia"

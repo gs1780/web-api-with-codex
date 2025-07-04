@@ -2,8 +2,8 @@
 # Resource group is required. Plan name and location are predefined for East Asia.
 
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ResourceGroupName
+    
+    [string]$ResourceGroupName="eastasia-rg1" # Default resource group name, can be overridden
 )
 
 $planName = "eastasia-app-service-plan"
