@@ -17,8 +17,7 @@ The script checks if the specified resource group exists and creates it in East 
 
 ## Run-WebApi.ps1
 
-Builds and runs the EmployeeManagementApi project. When the application is ready,
-it automatically opens the configured base URL in your default browser.
+Builds and runs the EmployeeManagementApi project. When the application is ready, it automatically opens the configured base URL in your default browser.
 
 ### Usage
 
@@ -26,5 +25,16 @@ it automatically opens the configured base URL in your default browser.
 ./Run-WebApi.ps1
 ```
 
-Parameters allow overriding the project path and the base URL. The default URL is
-`http://localhost:5000`.
+Parameters allow overriding the project path and the base URL. The default URL is `http://localhost:5000`.
+
+## Deploy-WebApi.ps1
+
+Publishes the EmployeeManagementApi project and deploys it to an Azure App Service. The script ensures the web app exists in the **eastasia-rg1** resource group using the **eastasia-app-service-plan**.
+
+### Usage
+
+```powershell
+./Deploy-WebApi.ps1
+```
+
+Parameters allow overriding the resource group, plan and app name. The default app name is **eastasia-webapi**.
