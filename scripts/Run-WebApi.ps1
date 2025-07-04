@@ -2,19 +2,23 @@
 
 [CmdletBinding()]
 param(
-    [string]$ProjectPath = "../EmployeeManagementApi/EmployeeManagementApi.csproj",
+    [string]$ProjectPath,
     [string]$BaseUrl = "http://localhost:5000"
 )
+
+if (-not $ProjectPath) {
+    $ProjectPath = Join-Path $PSScriptRoot "../EmployeeManagementApi/EmployeeManagementApi.csproj"
+}
 
 function Wait-Port {
     param([string]$Url)
     $uri = [System.Uri]$Url
-    $host = $uri.Host
+    $hostName = $uri.Host
     $port = $uri.Port
     while ($true) {
         try {
             $client = New-Object System.Net.Sockets.TcpClient
-            $client.Connect($host, $port)
+            $client.Connect($hostName, $port)
             $client.Dispose()
             break
         } catch {
